@@ -158,10 +158,7 @@ exports.book_create_post = [
 ];
 
 // Display book delete form on GET.
-/*
-exports.book_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Book delete GET");
-});*/
+
 
 exports.book_delete_get = asyncHandler(async (req, res, next) => {
   // Get details of books, book instances for specific book
@@ -213,10 +210,7 @@ exports.book_delete_post = asyncHandler(async (req, res, next) => {
 });
 
 // Display book update form on GET.
-/*
-exports.book_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Book update GET");
-});*/
+
 
 exports.book_update_get = asyncHandler(async (req, res, next) => {
   // Get book, authors and genres for form.
@@ -251,10 +245,7 @@ exports.book_update_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle book update on POST.
-/*
-exports.book_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Book update POST");
-});*/
+
 
 exports.book_update_post = [
   // Convert the genre to an array.
