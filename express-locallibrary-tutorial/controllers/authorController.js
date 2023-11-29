@@ -12,12 +12,8 @@ exports.author_list = asyncHandler(async (req, res, next) => {
   });
 });
 
-// Display detail page for a specific Author.
-/*
-exports.author_detail = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: Author detail: ${req.params.id}`);
-});
-*/
+
+
 // Display detail page for a specific Author.
 exports.author_detail = asyncHandler(async (req, res, next) => {
   // Get details of author and all their books (in parallel)
@@ -40,20 +36,13 @@ exports.author_detail = asyncHandler(async (req, res, next) => {
   });
 });
 // Display Author create form on GET.
-/*
-exports.author_create_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Author create GET");
-});
-*/
+
 exports.author_create_get = (req, res, next) => {
   res.render("author_form", { title: "Create Author" });
 };
 
 // Handle Author create on POST.
-/*
-exports.author_create_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Author create POST");
-});*/
+
 exports.author_create_post = [
   // Validate and sanitize fields.
   body("first_name")
@@ -112,10 +101,7 @@ exports.author_create_post = [
 ];
 
 // Display Author delete form on GET.
-/*
-exports.author_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Author delete GET");
-});*/
+
 
 exports.author_delete_get = asyncHandler(async (req, res, next) => {
   // Get details of author and all their books (in parallel)
@@ -137,10 +123,7 @@ exports.author_delete_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle Author delete on POST.
-/*
-exports.author_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Author delete POST");
-});*/
+
 
 exports.author_delete_post = asyncHandler(async (req, res, next) => {
   // Get details of author and all their books (in parallel)
