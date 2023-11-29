@@ -85,10 +85,7 @@ exports.genre_create_post = [
 ];
 
 // Display Genre delete form on GET.
-/*
-exports.genre_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Genre delete GET");
-});*/
+
 
 exports.genre_delete_get = asyncHandler(async (req, res, next) => {
   // Get details of genre and all associated books (in parallel)
@@ -111,10 +108,7 @@ exports.genre_delete_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle Genre delete on POST.
-/*
-exports.genre_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Genre delete POST");
-});*/
+
 
 exports.genre_delete_post = asyncHandler(async (req, res, next) => {
  
@@ -201,9 +195,11 @@ exports.genre_update_post = [
         // Genre exists, redirect to its detail page.
         res.redirect(genreExists.url);
       } else {
-        await genre.save();
-        // New genre saved. Redirect to genre detail page.
-        res.redirect(genre.url);
+        
+        const updatedGenre = await Genre.findByIdAndUpdate(req.params.id, genre, {});
+      // Redirect to book detail page.
+      res.redirect(updatedGenre.url);
+
       }
     }
   }),

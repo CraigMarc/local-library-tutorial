@@ -226,9 +226,9 @@ exports.author_update_post = [
      
 
       // Data from form is valid. Update the record.
-      const updatedBook = await Author.findByIdAndUpdate(req.params.id, author, {});
+      const updatedAuthor = await Author.findByIdAndUpdate(req.params.id, author, {});
       // Redirect to book detail page.
-      res.redirect(updatedBook.url);
+      res.redirect(updatedAuthor.url);
 
 
     }

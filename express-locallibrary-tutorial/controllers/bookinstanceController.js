@@ -205,9 +205,6 @@ exports.bookinstance_update_post = [
     } else {
       // Data from form is valid
 
-      /*
-      await bookInstance.save();
-      res.redirect(bookInstance.url);*/
       const updatedBookInstance = await BookInstance.findByIdAndUpdate(req.params.id, bookInstance, {});
       // Redirect to book detail page.
       res.redirect(updatedBookInstance.url);
