@@ -128,16 +128,12 @@ exports.bookinstance_delete_post = asyncHandler(async (req, res, next) => {
   }
 
 
-  await BookInstance.findByIdAndDelete(req.params.id);
+  await BookInstance.findByIdAndDelete(req.body.bookinstanceid);
   res.redirect("/catalog/bookinstances");
 
 });
 
 // Display BookInstance update form on GET.
-/*
-exports.bookinstance_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: BookInstance update GET");
-});*/
 
 exports.bookinstance_update_get = asyncHandler(async (req, res, next) => {
   const bookInstance = await BookInstance.findById(req.params.id)
@@ -150,11 +146,7 @@ exports.bookinstance_update_get = asyncHandler(async (req, res, next) => {
     err.status = 404;
     return next(err);
   }
-  /*
-  res.render("bookinstance_update", {
-    title: "Book:",
-    bookinstance: bookInstance,
-  });*/
+ 
   const allBooks = await Book.find({}, "title").sort({ title: 1 }).exec();
 
       res.render("bookinstance_form", {
@@ -168,10 +160,7 @@ exports.bookinstance_update_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle bookinstance update on POST.
-/*
-exports.bookinstance_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: BookInstance update POST");
-});*/
+
 
 exports.bookinstance_update_post = [
   // Validate and sanitize fields.
@@ -197,6 +186,7 @@ exports.bookinstance_update_post = [
       imprint: req.body.imprint,
       status: req.body.status,
       due_back: req.body.due_back,
+      _id: req.params.id, // This is required, or a new ID will be assigned!
     });
 
     if (!errors.isEmpty()) {
@@ -214,8 +204,13 @@ exports.bookinstance_update_post = [
       return;
     } else {
       // Data from form is valid
+
+      /*
       await bookInstance.save();
-      res.redirect(bookInstance.url);
+      res.redirect(bookInstance.url);*/
+      const updatedBookInstance = await BookInstance.findByIdAndUpdate(req.params.id, bookInstance, {});
+      // Redirect to book detail page.
+      res.redirect(updatedBookInstance.url);
     }
   }),
 ];

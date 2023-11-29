@@ -85,20 +85,63 @@ exports.genre_create_post = [
 ];
 
 // Display Genre delete form on GET.
+/*
 exports.genre_delete_get = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: Genre delete GET");
+});*/
+
+exports.genre_delete_get = asyncHandler(async (req, res, next) => {
+  // Get details of genre and all associated books (in parallel)
+  const [genre, booksInGenre] = await Promise.all([
+    Genre.findById(req.params.id).exec(),
+    Book.find({ genre: req.params.id }, "title summary").exec(),
+  ]);
+  if (genre === null) {
+    // No results.
+    const err = new Error("Genre not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("genre_delete", {
+    title: "Genre Delete",
+    genre: genre,
+    genre_books: booksInGenre,
+  });
 });
 
 // Handle Genre delete on POST.
+/*
 exports.genre_delete_post = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: Genre delete POST");
+});*/
+
+exports.genre_delete_post = asyncHandler(async (req, res, next) => {
+ 
+  // Get details of genre and all associated books (in parallel)
+  const [genre, booksInGenre] = await Promise.all([
+    Genre.findById(req.params.id).exec(),
+    Book.find({ genre: req.params.id }, "title summary").exec(),
+  ]);
+  console.log(booksInGenre)
+  if (booksInGenre.length > 0) {
+    // Author has books. Render in same way as for GET route.
+    res.render("genre_delete", {
+      title: "Delete Genre",
+      genre: genre,
+      genre_books: booksInGenre,
+    });
+    return;
+  } else {
+    // Author has no books. Delete object and redirect to the list of authors.
+    console.log(req.params)
+    await Genre.findByIdAndDelete(req.params.id);
+    res.redirect("/catalog/genres");
+  }
 });
 
 // Display Genre update form on GET.
-/*
-exports.genre_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Genre update GET");
-});*/
+
 
 exports.genre_update_get = asyncHandler(async (req, res, next) => {
   // Get details of genre and all associated books (in parallel)
@@ -122,10 +165,7 @@ exports.genre_update_get = asyncHandler(async (req, res, next) => {
 
 
 // Handle Genre update on POST.
-/*
-exports.genre_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Genre update POST");
-});*/
+
 
 exports.genre_update_post = [
   // Validate and sanitize the name field.
@@ -140,7 +180,10 @@ exports.genre_update_post = [
     const errors = validationResult(req);
 
     // Create a genre object with escaped and trimmed data.
-    const genre = new Genre({ name: req.body.name });
+    const genre = new Genre({ name: req.body.name ,
+      _id: req.params.id})
+    
+
 
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.

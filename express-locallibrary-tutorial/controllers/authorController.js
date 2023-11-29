@@ -148,10 +148,7 @@ exports.author_delete_post = asyncHandler(async (req, res, next) => {
 });
 
 // Display Author update form on GET.
-/*
-exports.author_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Author update GET");
-});*/
+
 
 exports.author_update_get = asyncHandler(async (req, res, next) => {
   // Get details of author and all their books (in parallel)
@@ -175,10 +172,6 @@ exports.author_update_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle Author update on POST.
-/*
-exports.author_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Author update POST");
-});*/
 
 exports.author_update_post = [
   // Validate and sanitize fields.
@@ -216,7 +209,7 @@ exports.author_update_post = [
       family_name: req.body.family_name,
       date_of_birth: req.body.date_of_birth,
       date_of_death: req.body.date_of_death,
-      //_id: req.params.id, // This is required, or a new ID will be assigned!
+      _id: req.params.id, // This is required, or a new ID will be assigned!
     });
 
     if (!errors.isEmpty()) {
@@ -230,11 +223,17 @@ exports.author_update_post = [
     } else {
       // Data from form is valid.
 
-      // Save author.
-      await author.save();
-      // Redirect to new author record.
-      res.redirect(author.url);
+     
+
+      // Data from form is valid. Update the record.
+      const updatedBook = await Author.findByIdAndUpdate(req.params.id, author, {});
+      // Redirect to book detail page.
+      res.redirect(updatedBook.url);
+
+
     }
+
+
   }),
 ];
 
