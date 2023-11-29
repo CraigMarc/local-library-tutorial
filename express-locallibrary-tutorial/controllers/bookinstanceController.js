@@ -14,11 +14,7 @@ exports.bookinstance_list = asyncHandler(async (req, res, next) => {
 });
 
 // Display detail page for a specific BookInstance.
-/*
-exports.bookinstance_detail = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: BookInstance detail: ${req.params.id}`);
-});
-*/
+
 // Display detail page for a specific BookInstance.
 exports.bookinstance_detail = asyncHandler(async (req, res, next) => {
   const bookInstance = await BookInstance.findById(req.params.id)
@@ -38,11 +34,7 @@ exports.bookinstance_detail = asyncHandler(async (req, res, next) => {
   });
 });
 // Display BookInstance create form on GET.
-/*
-exports.bookinstance_create_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: BookInstance create GET");
-});
-*/
+
 exports.bookinstance_create_get = asyncHandler(async (req, res, next) => {
   const allBooks = await Book.find({}, "title").sort({ title: 1 }).exec();
 
@@ -106,13 +98,50 @@ exports.bookinstance_create_post = [
 ];
 
 // Display BookInstance delete form on GET.
+/*
 exports.bookinstance_delete_get = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: BookInstance delete GET");
+});*/
+exports.bookinstance_delete_get = asyncHandler(async (req, res, next) => {
+  const bookInstance = await BookInstance.findById(req.params.id)
+    .populate("book")
+    .exec();
+
+  if (bookInstance === null) {
+    // No results.
+    const err = new Error("Book copy not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("bookinstance_delete", {
+    title: "Book:",
+    bookinstance: bookInstance,
+  });
 });
 
 // Handle BookInstance delete on POST.
+/*
 exports.bookinstance_delete_post = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: BookInstance delete POST");
+});*/
+
+exports.bookinstance_delete_post = asyncHandler(async (req, res, next) => {
+  const bookInstance = await BookInstance.findById(req.params.id)
+    .populate("book")
+    .exec();
+
+  if (bookInstance === null) {
+    // No results.
+    const err = new Error("Book copy not found");
+    err.status = 404;
+    return next(err);
+  }
+
+
+  await BookInstance.findByIdAndDelete(req.params.id);
+  res.redirect("/catalog/bookinstances");
+
 });
 
 // Display BookInstance update form on GET.

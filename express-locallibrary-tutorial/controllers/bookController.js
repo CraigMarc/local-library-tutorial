@@ -186,11 +186,6 @@ exports.book_delete_get = asyncHandler(async (req, res, next) => {
 
 
 // Handle book delete on POST.
-/*
-exports.book_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Book delete POST");
-});*/
-
 
 exports.book_delete_post = asyncHandler(async (req, res, next) => {
   // Get details of books and all their books (in parallel)
@@ -211,7 +206,7 @@ exports.book_delete_post = asyncHandler(async (req, res, next) => {
     return;
   } else {
     // Author has no books. Delete object and redirect to the list of authors.
-    console.log(req.params)
+    
     await Book.findByIdAndDelete(req.params.id);
     res.redirect("/catalog/books");
   }
